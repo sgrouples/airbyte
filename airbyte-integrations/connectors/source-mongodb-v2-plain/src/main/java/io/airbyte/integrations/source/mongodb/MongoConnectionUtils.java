@@ -35,6 +35,7 @@ public class MongoConnectionUtils {
         .driverName(DRIVER_NAME)
         .build();
 
+    System.out.println(mongoConnectionString);
     final MongoClientSettings.Builder mongoClientSettingsBuilder = MongoClientSettings.builder()
         .applyConnectionString(mongoConnectionString)
         .readPreference(ReadPreference.secondaryPreferred());
@@ -50,7 +51,8 @@ public class MongoConnectionUtils {
   }
 
   private static String buildConnectionString(final MongoDbSourceConfig config) {
-    return MongoDbDebeziumPropertiesManager.buildConnectionString(config.rawConfig(), true);
+    String sslConnectionString = MongoDbDebeziumPropertiesManager.buildConnectionString(config.rawConfig(), true);
+    return sslConnectionString.replaceFirst("&tls=true","");
   }
 
 }

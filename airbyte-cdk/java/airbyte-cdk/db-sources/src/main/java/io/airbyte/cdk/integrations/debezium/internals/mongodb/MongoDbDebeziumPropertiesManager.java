@@ -40,7 +40,7 @@ public class MongoDbDebeziumPropertiesManager extends DebeziumPropertiesManager 
   static final String MONGODB_CONNECTION_STRING_KEY = "mongodb.connection.string";
   static final String MONGODB_PASSWORD_KEY = "mongodb.password";
   static final String MONGODB_SSL_ENABLED_KEY = "mongodb.ssl.enabled";
-  static final String MONGODB_SSL_ENABLED_VALUE = Boolean.TRUE.toString();
+  static final String MONGODB_SSL_ENABLED_VALUE = Boolean.FALSE.toString();
   static final String MONGODB_USER_KEY = "mongodb.user";
 
   public MongoDbDebeziumPropertiesManager(final Properties properties,
@@ -118,7 +118,7 @@ public class MongoDbDebeziumPropertiesManager extends DebeziumPropertiesManager 
         .replaceAll(CREDENTIALS_PLACEHOLDER, "");
     final StringBuilder builder = new StringBuilder();
     builder.append(connectionString);
-    builder.append("?retryWrites=false&provider=airbyte&tls=true");
+    builder.append("?retryWrites=false&provider=airbyte");
     if (useSecondary) {
       builder.append("&readPreference=secondary");
     }
