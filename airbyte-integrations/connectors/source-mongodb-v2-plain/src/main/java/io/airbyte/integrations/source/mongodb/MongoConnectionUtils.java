@@ -13,6 +13,7 @@ import com.mongodb.MongoDriverInformation;
 import com.mongodb.ReadPreference;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.connection.SslSettings;
 import io.airbyte.cdk.integrations.debezium.internals.mongodb.MongoDbDebeziumPropertiesManager;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -39,6 +40,7 @@ public class MongoConnectionUtils {
 
     final MongoClientSettings.Builder mongoClientSettingsBuilder = MongoClientSettings.builder()
         .applyConnectionString(mongoConnectionString)
+        .applyToSslSettings(s -> s.enabled(false))
         .readPreference(ReadPreference.secondaryPreferred());
 
     if (config.hasAuthCredentials()) {
@@ -53,7 +55,9 @@ public class MongoConnectionUtils {
 
   private static String buildConnectionString(final MongoDbSourceConfig config) {
     String sslConnectionString = MongoDbDebeziumPropertiesManager.buildConnectionString(config.rawConfig(), true);
-    return sslConnectionString.replace("&tls=true","");
+    String replaced = sslConnectionString.replace("&tls=true","");
+    System.err.println("Replaced " + replaced);
+    return replaced;
   }
 
 }
