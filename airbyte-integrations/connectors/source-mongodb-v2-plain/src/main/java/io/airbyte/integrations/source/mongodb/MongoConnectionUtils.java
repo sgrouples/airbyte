@@ -29,13 +29,14 @@ public class MongoConnectionUtils {
    * @return The configured {@link MongoClient}.
    */
   public static MongoClient createMongoClient(final MongoDbSourceConfig config) {
+
     final ConnectionString mongoConnectionString = new ConnectionString(buildConnectionString(config));
 
     final MongoDriverInformation mongoDriverInformation = MongoDriverInformation.builder()
         .driverName(DRIVER_NAME)
         .build();
 
-    System.out.println(mongoConnectionString);
+
     final MongoClientSettings.Builder mongoClientSettingsBuilder = MongoClientSettings.builder()
         .applyConnectionString(mongoConnectionString)
         .readPreference(ReadPreference.secondaryPreferred());
@@ -52,7 +53,7 @@ public class MongoConnectionUtils {
 
   private static String buildConnectionString(final MongoDbSourceConfig config) {
     String sslConnectionString = MongoDbDebeziumPropertiesManager.buildConnectionString(config.rawConfig(), true);
-    return sslConnectionString.replaceFirst("&tls=true","");
+    return sslConnectionString.replace("&tls=true","");
   }
 
 }
