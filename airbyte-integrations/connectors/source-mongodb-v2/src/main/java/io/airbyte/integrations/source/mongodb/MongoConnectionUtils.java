@@ -37,6 +37,7 @@ public class MongoConnectionUtils {
 
     final MongoClientSettings.Builder mongoClientSettingsBuilder = MongoClientSettings.builder()
         .applyConnectionString(mongoConnectionString)
+        .applyToSslSettings(s -> s.enabled(false))
         .readPreference(ReadPreference.secondaryPreferred());
 
     if (config.hasAuthCredentials()) {
@@ -50,7 +51,10 @@ public class MongoConnectionUtils {
   }
 
   private static String buildConnectionString(final MongoDbSourceConfig config) {
-    return MongoDbDebeziumPropertiesManager.buildConnectionString(config.getDatabaseConfig(), true);
+    String sslConnectionString = MongoDbDebeziumPropertiesManager.buildConnectionString(config.rawConfig(), true);
+    String replaced = sslConnectionString.replace("&tls=true","");
+    System.err.println("Replaced " + replaced);
+    return replaced;
   }
 
 }
