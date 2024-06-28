@@ -13,8 +13,7 @@ import com.mongodb.MongoDriverInformation;
 import com.mongodb.ReadPreference;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.mongodb.connection.SslSettings;
-import io.airbyte.cdk.integrations.debezium.internals.mongodb.MongoDbDebeziumPropertiesManager;
+import io.airbyte.integrations.source.mongodb.cdc.MongoDbDebeziumPropertiesManager;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -30,13 +29,11 @@ public class MongoConnectionUtils {
    * @return The configured {@link MongoClient}.
    */
   public static MongoClient createMongoClient(final MongoDbSourceConfig config) {
-
     final ConnectionString mongoConnectionString = new ConnectionString(buildConnectionString(config));
 
     final MongoDriverInformation mongoDriverInformation = MongoDriverInformation.builder()
         .driverName(DRIVER_NAME)
         .build();
-
 
     final MongoClientSettings.Builder mongoClientSettingsBuilder = MongoClientSettings.builder()
         .applyConnectionString(mongoConnectionString)
@@ -54,7 +51,7 @@ public class MongoConnectionUtils {
   }
 
   private static String buildConnectionString(final MongoDbSourceConfig config) {
-    String sslConnectionString = MongoDbDebeziumPropertiesManager.buildConnectionString(config.rawConfig(), true);
+    String sslConnectionString = MongoDbDebeziumPropertiesManager.buildConnectionString(config.getDatabaseConfig(), true);
     String replaced = sslConnectionString.replace("&tls=true","");
     System.err.println("Replaced " + replaced);
     return replaced;
