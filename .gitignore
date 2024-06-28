@@ -103,3 +103,7 @@ scan-journal.log
 
 # mvn
 target/
+
+.devenv
+.direnv
+**/.metals
