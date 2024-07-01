@@ -320,6 +320,7 @@ public class MongoUtil {
      * Fetch the keys/types from the first N documents and the last N documents from the collection.
      * This is an attempt to "survey" the documents in the collection for variance in the schema keys.
      */
+    LOGGER.info("Discovering fields of collection '{}'", collectionName);
     final Set<Field> discoveredFields;
     final MongoCollection<Document> mongoCollection = mongoClient.getDatabase(databaseName).getCollection(collectionName);
     if (isSchemaEnforced) {
@@ -329,6 +330,7 @@ public class MongoUtil {
       // exists on every record).
       discoveredFields = new HashSet<>(getFieldsForSchemaless(mongoCollection));
     }
+    LOGGER.info("Discovered {} fields of collection '{}'", discoveredFields.size(), collectionName);
     return Optional
         .ofNullable(
             !discoveredFields.isEmpty() ? createAirbyteStream(collectionName, databaseName, new ArrayList<>(discoveredFields), isSchemaEnforced)
