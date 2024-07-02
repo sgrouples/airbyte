@@ -402,10 +402,11 @@ public class MongoUtil {
 
   private static JsonSchemaType convertToSchemaType(final String type) {
     return switch (type) {
-      case "boolean" -> JsonSchemaType.BOOLEAN;
+      case "bool" -> JsonSchemaType.BOOLEAN;
       case "int", "long", "double", "decimal" -> JsonSchemaType.NUMBER;
       case "array" -> JsonSchemaType.ARRAY;
       case "object", "javascriptWithScope" -> JsonSchemaType.OBJECT;
+      case "date" -> JsonSchemaType.STRING_TIMESTAMP_WITH_TIMEZONE;
       case "null" -> JsonSchemaType.NULL;
       default -> JsonSchemaType.STRING;
     };
